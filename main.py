@@ -15,6 +15,7 @@ import matplotlib.gridspec as gridspec
 from matplotlib import style
 import matplotlib.ticker as mtick
 from decimal import*
+
 getcontext().prec = 6 
 majorLocator = mtick.MultipleLocator(2.)
 majorFormatter = mtick.ScalarFormatter(useOffset=False)   #format y scales to be scalar 
@@ -99,11 +100,11 @@ class Window(QtGui.QDialog):
         self.button5.setStyleSheet('QPushButton {background-color: #faebd7;}')  #color: red;              
               
 #        self.openFile = QtGui.QAction(QtGui.QIcon('open.png'), 'Open', self)        
-        self.openFile = QtGui.QPushButton('   ')
-        self.openFile.setStyleSheet('QPushButton {background-color: #c7d2d2;}')                  
+#        self.openFile = QtGui.QPushButton('   ')
+#        self.openFile.setStyleSheet('QPushButton {background-color: #c7d2d2;}')                  
 #        self.numday = QtGui.QPushButton('Choose day to plot')    
         self.numdaySpinBox = QSpinBox()
-        self.Daylabel = QLabel('Choose day to plot:')
+#        self.Daylabel = QLabel('Choose day to plot:')
         self.numdaySpinBox.setRange(1, 366)
         self.numdaySpinBox.setValue(100)        
         
@@ -111,7 +112,7 @@ class Window(QtGui.QDialog):
         self.button6.setStyleSheet('QPushButton {background-color: #b3cc99 ;}')  #color: red;              
         self.button6_1 = QtGui.QPushButton('All(2) chosen day')   
         self.button6_1.setStyleSheet('QPushButton {background-color: #b3cc99 ;}')                                   
-        self.openFile.setShortcut('Ctrl+O')
+#        self.openFile.setShortcut('Ctrl+O')
                                     
 
         self.button1.clicked.connect(self.plot1) #Plot PO4,SO4,o2     
@@ -126,20 +127,20 @@ class Window(QtGui.QDialog):
 
         # set the layout
         layout = QtGui.QGridLayout()
-        layout.addWidget(self.toolbar,0,2,1,6)                                 
-        layout.addWidget(self.canvas,1,2,1,6)      #position y,position x, length y,length x         
-        layout.addWidget(self.button1,3,2,1,1)                  
-        layout.addWidget(self.button2,4,2,1,1)             
+        layout.addWidget(self.toolbar,0,1,1,8)                                 
+        layout.addWidget(self.canvas,1,1,1,8)      #position y,position x, length y,length x         
+        layout.addWidget(self.button1,3,1,1,1)                  
+        layout.addWidget(self.button2,3,2,1,1)             
         layout.addWidget(self.button3,3,3,1,1)                            
-        layout.addWidget(self.button4,4,3,1,1)         
-        layout.addWidget(self.button5,3,4,1,1)  
+        layout.addWidget(self.button4,3,4,1,1)         
+        layout.addWidget(self.button5,3,5,1,1)  
 
-        layout.addWidget(self.openFile,4,4,1,1)      
-        layout.addWidget(self.Daylabel,4,5,1,1)   
-        layout.addWidget(self.numdaySpinBox,4,5,1,1)  
+#        layout.addWidget(self.openFile,4,4,1,1)      
+#        layout.addWidget(self.Daylabel,4,5,1,1)   
+        layout.addWidget(self.numdaySpinBox,3,6,1,1)  
 
-        layout.addWidget(self.button6,3,6,1,1)         
-        layout.addWidget(self.button6_1,4,6,1,1)
+        layout.addWidget(self.button6,3,7,1,1)         
+        layout.addWidget(self.button6_1,3,8,1,1)
                                   
         self.setLayout(layout)        
         
