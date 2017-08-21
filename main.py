@@ -8,7 +8,7 @@ from PyQt4.QtGui import QSpinBox,QLabel
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
-
+import readdata
 from netCDF4 import Dataset
 import numpy as np
 import matplotlib.gridspec as gridspec
@@ -150,54 +150,9 @@ class Window(QtGui.QDialog):
                                                   'Open netcdf ',
                                                   os.getcwd(),
                                                   "netcdf (*.nc);; all (*)"))            
-        fh = Dataset(fname)
-  
-        self.depth = fh.variables['z'][:] 
-        self.depth2 = fh.variables['z2'][:] #middle points
-        self.alk =  fh.variables['Alk'][:,:]
-        self.temp =  fh.variables['T'][:,:]
-        self.sal =  fh.variables['S'][:,:]
-        self.kz =  fh.variables['Kz'][:,:]
-        self.dic =  fh.variables['DIC'][:,:]
-        self.phy =  fh.variables['Phy'][:,:]
-        self.het =  fh.variables['Het'][:,:]
-        self.no3 =  fh.variables['NO3'][:,:]
-        self.po4 =  fh.variables['PO4'][:,:]
-        self.nh4 =  fh.variables['NH4'][:,:]
-        self.pon =  fh.variables['PON'][:,:]
-        self.don =  fh.variables['DON'][:,:]
-        self.o2  =  fh.variables['O2'][:,:]
-        self.mn2 =  fh.variables['Mn2'][:,:]
-        self.mn3 =  fh.variables['Mn3'][:,:]
-        self.mn4 =  fh.variables['Mn4'][:,:]
-        self.h2s =  fh.variables['H2S'][:,:]
-        self.mns =  fh.variables['MnS'][:,:]
-        self.mnco3 =  fh.variables['MnCO3'][:,:]
-        self.fe2 =  fh.variables['Fe2'][:,:]
-        self.fe3 =  fh.variables['Fe3'][:,:]
-        self.fes =  fh.variables['FeS'][:,:]
-        self.feco3 =  fh.variables['FeCO3'][:,:]
-        self.no2 =  fh.variables['NO2'][:,:]
-        self.s0 =  fh.variables['S0'][:,:]
-        self.s2o3 =  fh.variables['S2O3'][:,:]
-        self.so4 =  fh.variables['SO4'][:,:]
-        self.si =  fh.variables['Si'][:,:]
-        self.si_part =  fh.variables['Sipart'][:,:]
-        self.baae =  fh.variables['Baae'][:,:]
-        self.bhae =  fh.variables['Bhae'][:,:]
-        self.baan =  fh.variables['Baan'][:,:]
-        self.bhan =  fh.variables['Bhan'][:,:]
-        self.caco3 =  fh.variables['CaCO3'][:,:]
-        self.fes2 =  fh.variables['FeS2'][:,:]
-        self.ch4 =  fh.variables['CH4'][:,:]
-        self.ph =  fh.variables['pH'][:,:]
-        self.pco2 =  fh.variables['pCO2'][:,:]
-        self.om_ca =  fh.variables['Om_Ca'][:,:]
-        self.om_ar =  fh.variables['Om_Ar'][:,:]
-        self.co3 =  fh.variables['CO3'][:,:]
-        self.ca =  fh.variables['Ca'][:,:]
-        self.time =  fh.variables['time'][:]
         
+        readdata.readdata_brom(self,fname)
+   
         self.calculate_watmax()
         self.calculate_nwatmax()
         self.calculate_bblmax()
@@ -209,8 +164,8 @@ class Window(QtGui.QDialog):
         self.depth_sed2()
         self.calculate_sedmin()          
         self.calculate_sedmax()   
-        self.maxmin()      
-        fh.close()
+        self.maxmin()     
+        
                 
     def calculate_watmax(self):
         for n in range(0,(len(self.depth2)-1)):
@@ -2147,12 +2102,16 @@ class Window(QtGui.QDialog):
         gs1.update(left=0.06, right=0.93, top = 0.26, bottom = 0.02, wspace=wspace,hspace=hspace)     
            
         #create subplots
-        self.ax00 = self.figure.add_subplot(gs[0]) # water
+        m = 0
+        for n in (self.ax00,self.ax10,self.ax20,self.ax30,self.ax40,self.ax50):
+            n = self.figure.add_subplot(gs[m]) 
+            m = m+1   
+        '''self.ax00 = self.figure.add_subplot(gs[0]) # water
         self.ax10 = self.figure.add_subplot(gs[1])
         self.ax20 = self.figure.add_subplot(gs[2])
         self.ax30 = self.figure.add_subplot(gs[3])        
         self.ax40 = self.figure.add_subplot(gs[4])
-        self.ax50 = self.figure.add_subplot(gs[5]) 
+        self.ax50 = self.figure.add_subplot(gs[5])''' 
         
         self.ax01 = self.figure.add_subplot(gs[6]) #BBL
         self.ax11 = self.figure.add_subplot(gs[7])
@@ -2285,10 +2244,7 @@ class Window(QtGui.QDialog):
                     self.ax01,self.ax11,self.ax21,self.ax31,self.ax41,self.ax51,
                     self.ax02,self.ax12,self.ax22,self.ax32,self.ax42,self.ax52):
             self.y_lim1(axis)     
-                       
-              
-                             
-
+                                                                  
         for axis in ( self.ax00, self.ax00_1,  self.ax01_1):   
             axis.set_xlim([self.phymin,self.phymax])
             axis.set_xticks(np.arange(0,(round(self.phymax+(self.phymax/2.),5)),self.phymax/2.))                   
